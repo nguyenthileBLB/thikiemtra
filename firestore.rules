@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    match /exams/{examId} {
+      // Allow any authenticated user (teacher or student) to read the exam key
+      // Teacher needs to write it.
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    match /submissions/{submissionId} {
+      // Allow any authenticated user to create a submission
+      // Allow read for the teacher (or anyone authenticated for this prototype)
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+    }
+  }
+}

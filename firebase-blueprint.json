@@ -1,0 +1,63 @@
+{
+  "entities": {
+    "Exam": {
+      "title": "Exam Answer Key",
+      "description": "Stores the correct answers for the Chemistry exam",
+      "type": "object",
+      "properties": {
+        "part1": {
+          "type": "array",
+          "description": "18 multiple choice answers (A, B, C, D)",
+          "items": { "type": "string" }
+        },
+        "part2": {
+          "type": "array",
+          "description": "4 True/False questions, each with a, b, c, d",
+          "items": {
+            "type": "object",
+            "properties": {
+              "a": { "type": "boolean" },
+              "b": { "type": "boolean" },
+              "c": { "type": "boolean" },
+              "d": { "type": "boolean" }
+            }
+          }
+        },
+        "part3": {
+          "type": "array",
+          "description": "6 short answers",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "Submission": {
+      "title": "Student Submission",
+      "description": "Stores a student's exam submission and score",
+      "type": "object",
+      "properties": {
+        "studentName": { "type": "string" },
+        "score": { "type": "number" },
+        "answers": {
+          "type": "object",
+          "properties": {
+             "part1": { "type": "array", "items": { "type": "string" } },
+             "part2": { "type": "array", "items": { "type": "object" } },
+             "part3": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentName", "score", "answers", "submittedAt"]
+    }
+  },
+  "firestore": {
+    "/exams/{examId}": {
+      "schema": { "$ref": "#/entities/Exam" },
+      "description": "The answer keys for exams. The ID will be 'chemistry_2025'."
+    },
+    "/submissions/{submissionId}": {
+      "schema": { "$ref": "#/entities/Submission" },
+      "description": "Student submissions."
+    }
+  }
+}
